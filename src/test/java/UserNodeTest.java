@@ -100,7 +100,9 @@ public class UserNodeTest {
         userNodeService.delTreeNode(treeNode);
     }
 
-
+    /**
+     * 用户与树的节点的增加操作
+     */
     @Test
     public void addUserTreeRel() {
         UserNodeInfo userNodeReq = new UserNodeInfo();
@@ -126,11 +128,17 @@ public class UserNodeTest {
         userNodeService.addUserTreeRel(userNodeReq);
     }
 
+    /**
+     * 用户与树的节点的删除操作
+     */
     @Test
     public void delUserTreeNode() {
         userNodeService.delUserTreeNode("test1", 2);
     }
 
+    /**
+     * 用户与树的节点的查询操作
+     */
     @Test
     public void selectUserTreeNode() {
         UserNodeInfo userNodeReq = new UserNodeInfo();

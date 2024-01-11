@@ -45,7 +45,7 @@ public class UserNodeServiceImpl implements UserNodeService {
     UserService userService;
 
     /**
-     * 添加一棵树(只有管理员允许添加树)
+     * 添加一棵树
      *
      * @param userNodeReq
      */
@@ -217,7 +217,6 @@ public class UserNodeServiceImpl implements UserNodeService {
 
     /**
      * 用户与树的节点的查询操作
-     *
      * @param userNodeReq
      */
     @Override

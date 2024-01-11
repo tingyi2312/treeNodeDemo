@@ -24,13 +24,13 @@ public class UserNodeController {
     private UserNodeService userNodeService;
 
     /**
-     * 根据id查询
-     * @param bookVO
+     * 用户与树的节点的增加操作
+     * @param info
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/addUserTreeRel", method = RequestMethod.POST)
-    public Result<Boolean> addUserTreeRel(@RequestBody UserNodeInfo bookVO) {
-        return JsonResultBuilder.simpleSucc(userNodeService.addUserTreeRel(null));
+    public Result<Boolean> addUserTreeRel(@RequestBody UserNodeInfo info) {
+        return JsonResultBuilder.simpleSucc(userNodeService.addUserTreeRel(info));
     }
 }

@@ -39,9 +39,9 @@ public interface UserNodeService {
 
     /**
      * 用户与树的节点的增加操作
-     * @param nodeInfo
+     * @param userNodeReq
      */
-    void addUserTreeNode(NodeInfo nodeInfo);
+    Boolean addUserTreeRel(UserNodeInfo userNodeReq);
 
     /**
      * 用户与树的节点的删除操作
@@ -54,7 +54,5 @@ public interface UserNodeService {
      * @param NodeInfo
      */
     NodeInfo selectUserTreeNode(NodeInfo NodeInfo);
-
-    void delTreeNode(UserNodeInfo userNodeReq);
 
 }

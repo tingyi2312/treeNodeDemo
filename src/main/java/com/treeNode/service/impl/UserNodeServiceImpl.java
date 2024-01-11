@@ -1,18 +1,26 @@
 package com.treeNode.service.impl;
 
+import com.treeNode.controller.UserController;
+import com.treeNode.enums.UserTypeEnum;
 import com.treeNode.pojo._do.TreeNode;
+import com.treeNode.pojo._do.User;
+import com.treeNode.pojo._do.UserTreeRel;
 import com.treeNode.pojo.mapper.TreeNodeMapper;
 import com.treeNode.pojo.mapper.UserMapper;
 import com.treeNode.pojo.mapper.UserTreeRelMapper;
 import com.treeNode.pojo.request.NodeInfo;
 import com.treeNode.pojo.request.UserNodeInfo;
 import com.treeNode.service.UserNodeService;
+import com.treeNode.service.UserService;
 import com.treeNode.util.GlobalConstants;
 import javafx.css.Styleable;
 import lombok.extern.java.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,6 +28,9 @@ import java.util.stream.Collectors;
 @Service
 @Log
 public class UserNodeServiceImpl implements UserNodeService {
+
+    public static final Logger logger = LoggerFactory.getLogger(UserNodeServiceImpl.class);
+
     @Autowired
     private TreeNodeMapper treeNodeMapper;
 
@@ -28,6 +39,9 @@ public class UserNodeServiceImpl implements UserNodeService {
 
     @Autowired
     private UserTreeRelMapper userTreeRelMapper;
+
+    @Autowired
+    UserService userService;
 
     /**
      * 添加一棵树(只有管理员允许添加树)
@@ -133,27 +147,53 @@ public class UserNodeServiceImpl implements UserNodeService {
         treeNodeMapper.updateBySelective(treeNode);
     }
 
-
-    /**
-     * 删除树节点
-     *
-     * @param userNodeReq
-     */
-    @Override
-    public void delTreeNode(UserNodeInfo userNodeReq) {
-
+    private Boolean hasPrivate(String userName) {
+        User user = userService.getUserInfoByName(userName);
+        if (null == user || UserTypeEnum.NORMAL.getCode().equals(user.getUserType())) {
+            return false;
+        }
+        return true;
     }
-
 
 
     /**
      * 用户与树的节点的增加操作
-     *
-     * @param NodeInfo
+     * @param userNodeReq
      */
     @Override
-    public void addUserTreeNode(NodeInfo NodeInfo) {
+    public Boolean addUserTreeRel(UserNodeInfo userNodeReq) {
+        User user = userService.getUserInfoByName(userNodeReq.getUserName());
+        if (null == user || UserTypeEnum.NORMAL.getCode().equals(user.getUserType())) {
+            logger.error("非管理员，没有操作权限");
+            return false;
+        }
+        if (null == userNodeReq.getNodeInfo()) {
+            logger.error("节点信息为空");
+            return false;
+        }
+        try {
 
+        } catch (Exception e) {
+            logger.error("用户与树的节点的增加操作失败:", e);
+            return false;
+        }
+        setUserNodeInfo(user.getId(), userNodeReq.getNodeInfo());
+        return true;
+    }
+
+    private void setUserNodeInfo(Integer userId, NodeInfo nodeInfo) {
+        UserTreeRel userTreeRel = new UserTreeRel();
+        userTreeRel.setUserId(userId);
+        userTreeRel.setNodeId(nodeInfo.getNodeId());
+        userTreeRel.setActive(GlobalConstants.ACTIVE_YES);
+        userTreeRel.setCreateTime(new Date());
+        userTreeRel.setUpdateTime(new Date());
+        userTreeRelMapper.insert(userTreeRel);
+        if (!CollectionUtils.isEmpty(nodeInfo.getSubNodeList())) {
+            nodeInfo.getSubNodeList().forEach(node -> {
+                setUserNodeInfo(userId, node);
+            });
+        }
     }
 
     /**

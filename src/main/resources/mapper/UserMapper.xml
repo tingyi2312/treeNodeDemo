@@ -14,6 +14,15 @@
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.treeNode.pojo._do.User" >
+    select id, user_name, user_type, active, create_time, update_time
+    from user
+    where
+    <if test="userName != null and userName.trim()!=''">
+      user_name = #{userName,jdbcType=VARCHAR} AND
+    </if>
+    active = 1
+  </select>
   <insert id="insert" parameterType="com.treeNode.pojo._do.User" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()

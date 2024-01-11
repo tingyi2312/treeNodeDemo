@@ -1,4 +1,4 @@
-package com.treeNode;
+package com.treeNode.enums;
 
 public enum UserTypeEnum {
     ADMIN("1","管理员"),

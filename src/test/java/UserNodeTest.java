@@ -1,5 +1,5 @@
 import com.treeNode.BootStrapApplication;
-import com.treeNode.UserTypeEnum;
+import com.treeNode.enums.UserTypeEnum;
 import com.treeNode.pojo._do.TreeNode;
 import com.treeNode.pojo.request.NodeInfo;
 import com.treeNode.pojo.request.UserNodeInfo;
@@ -96,5 +96,31 @@ public class UserNodeTest {
         treeNode.setNodeName("newNode");
         treeNode.setParentId(2);
         userNodeService.delTreeNode(treeNode);
+    }
+
+
+    @Test
+    public void addUserTreeRel() {
+        UserNodeInfo userNodeReq = new UserNodeInfo();
+        userNodeReq.setUserName("test1");
+        userNodeReq.setTreeName("tree1");
+
+        NodeInfo nodeInfo = new NodeInfo();
+        nodeInfo.setNodeName("root");
+        nodeInfo.setNodeId(1);
+        NodeInfo nodeInfoA1 = new NodeInfo();
+        nodeInfoA1.setNodeName("a1");
+        nodeInfoA1.setNodeId(2);
+        nodeInfo.setSubNodeList(Arrays.asList(nodeInfoA1));
+
+        NodeInfo nodeInfoB1 = new NodeInfo();
+        nodeInfoB1.setNodeName("b1");
+        nodeInfoB1.setNodeId(3);
+        NodeInfo nodeInfoB2 = new NodeInfo();
+        nodeInfoB2.setNodeName("b2");
+        nodeInfoB2.setNodeId(4);
+        nodeInfoA1.setSubNodeList(Arrays.asList(nodeInfoB1, nodeInfoB2));
+        userNodeReq.setNodeInfo(nodeInfo);
+        userNodeService.addUserTreeRel(userNodeReq);
     }
 }

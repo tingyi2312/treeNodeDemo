@@ -19,6 +19,8 @@ public interface TreeNodeMapper {
 
     int updateByPrimaryKey(TreeNode treeNode);
 
+    int updateBySelective(TreeNode treeNode);
+
     int deleteByPrimaryKey(Integer id);
 
 }

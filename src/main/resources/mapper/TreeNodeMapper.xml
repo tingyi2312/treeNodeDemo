@@ -25,9 +25,6 @@
     active = 1
     order by parent_id
   </select>
-
-
-
   <insert id="insert" parameterType="com.treeNode.pojo._do.TreeNode" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
@@ -45,5 +42,21 @@
     update tree_node
     set node_name = #{nodeName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateBySelective" parameterType="com.treeNode.pojo._do.TreeNode" >
+    update tree_node
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="active != null">
+        active = #{active,jdbcType=INTEGER}
+      </if>
+    </trim>
+    where
+    <if test="treeName != null and treeName.trim()!=''">
+      tree_name = #{treeName,jdbcType=VARCHAR} AND
+    </if>
+    <if test="nodeName != null and nodeName.trim()!=''">
+      node_name = #{nodeName,jdbcType=VARCHAR} AND
+    </if>
+    active = 1
   </update>
 </mapper>

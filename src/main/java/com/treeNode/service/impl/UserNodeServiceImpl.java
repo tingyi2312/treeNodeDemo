@@ -58,49 +58,8 @@ public class UserNodeServiceImpl implements UserNodeService {
         return treeNode.getId();
     }
 
-
     /**
-     * 增加树节点
-     *
-     * @param NodeInfo
-     */
-    @Override
-    public void addTreeNode(NodeInfo NodeInfo) {
-
-    }
-
-    /**
-     * 删除树节点
-     *
-     * @param NodeInfo
-     */
-    @Override
-    public void delTreeNode(NodeInfo NodeInfo) {
-
-    }
-
-    /**
-     * 查询树节点
-     *
-     * @param NodeInfo
-     */
-    @Override
-    public NodeInfo selectTreeNode(NodeInfo NodeInfo) {
-        return null;
-    }
-
-    /**
-     * 删除树节点
-     *
-     * @param userNodeReq
-     */
-    @Override
-    public void delTreeNode(UserNodeInfo userNodeReq) {
-
-    }
-
-    /**
-     * 查询树节点
+     * 查询树
      *
      * @param userNodeReq
      */
@@ -118,7 +77,7 @@ public class UserNodeServiceImpl implements UserNodeService {
         TreeNode rootnode = root.get(0);
         nodeInfo.setNodeId(rootnode.getId());
         nodeInfo.setNodeName(rootnode.getNodeName());
-       if (!CollectionUtils.isEmpty(treeNodeList)) {
+        if (!CollectionUtils.isEmpty(treeNodeList)) {
             treeNodeList.stream().forEach(node -> {
                 NodeInfo nodeInfoTemp = new NodeInfo();
                 nodeInfoTemp.setNodeId(node.getId());
@@ -133,7 +92,7 @@ public class UserNodeServiceImpl implements UserNodeService {
                     nodeList = nodeMap.get(node.getParentId());
                 }
                 nodeList.add(nodeInfoTemp);
-                if(node.getParentId()!=null) {
+                if(node.getParentId() != null) {
                     nodeMap.put(node.getParentId(), nodeList);
                 }
             });
@@ -146,6 +105,46 @@ public class UserNodeServiceImpl implements UserNodeService {
         userNodeResp.setNodeInfo(nodeInfo);
         return userNodeResp;
     }
+
+
+    /**
+     * 增加树节点
+     *
+     * @param treeNode
+     */
+    @Override
+    public void addTreeNode(TreeNode treeNode) {
+        treeNode.setActive(GlobalConstants.ACTIVE_YES);
+        treeNode.setCreateTime(new Date());
+        treeNode.setUpdateTime(new Date());
+        treeNodeMapper.insert(treeNode);
+    }
+
+    /**
+     * 删除树节点
+     *
+     * @param treeNode
+     */
+    @Override
+    public void delTreeNode(TreeNode treeNode) {
+        treeNode.setActive(GlobalConstants.ACTIVE_NO);
+        treeNode.setCreateTime(new Date());
+        treeNode.setUpdateTime(new Date());
+        treeNodeMapper.updateBySelective(treeNode);
+    }
+
+
+    /**
+     * 删除树节点
+     *
+     * @param userNodeReq
+     */
+    @Override
+    public void delTreeNode(UserNodeInfo userNodeReq) {
+
+    }
+
+
 
     /**
      * 用户与树的节点的增加操作

@@ -1,5 +1,6 @@
 package com.treeNode.service;
 
+import com.treeNode.pojo._do.TreeNode;
 import com.treeNode.pojo.request.NodeInfo;
 import com.treeNode.pojo.request.UserNodeInfo;
 
@@ -20,33 +21,33 @@ public interface UserNodeService {
 
     /**
      * 增加树节点
-     * @param NodeInfo
+     * @param treeNode
      */
-    void addTreeNode(NodeInfo NodeInfo);
+    void addTreeNode(TreeNode treeNode);
 
     /**
      * 删除树节点
-     * @param NodeInfo
+     * @param treeNode
      */
-    void delTreeNode(NodeInfo NodeInfo);
+    void delTreeNode(TreeNode treeNode);
 
     /**
      * 查询树节点
-     * @param NodeInfo
+     * @param userNodeInfo
      */
-    NodeInfo selectTreeNode(NodeInfo NodeInfo);
+    UserNodeInfo selectTreeNode(UserNodeInfo userNodeInfo);
 
     /**
      * 用户与树的节点的增加操作
-     * @param NodeInfo
+     * @param nodeInfo
      */
-    void addUserTreeNode(NodeInfo NodeInfo);
+    void addUserTreeNode(NodeInfo nodeInfo);
 
     /**
      * 用户与树的节点的删除操作
-     * @param NodeInfo
+     * @param nodeInfo
      */
-    void delUserTreeNode(NodeInfo NodeInfo);
+    void delUserTreeNode(NodeInfo nodeInfo);
 
     /**
      * 用户与树的节点的查询操作
@@ -55,7 +56,5 @@ public interface UserNodeService {
     NodeInfo selectUserTreeNode(NodeInfo NodeInfo);
 
     void delTreeNode(UserNodeInfo userNodeReq);
-
-    UserNodeInfo selectTreeNode(UserNodeInfo userNodeReq);
 
 }

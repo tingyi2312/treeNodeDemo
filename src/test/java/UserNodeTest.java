@@ -1,5 +1,6 @@
 import com.treeNode.BootStrapApplication;
 import com.treeNode.UserTypeEnum;
+import com.treeNode.pojo._do.TreeNode;
 import com.treeNode.pojo.request.NodeInfo;
 import com.treeNode.pojo.request.UserNodeInfo;
 import com.treeNode.pojo.request.UserRequest;
@@ -34,7 +35,7 @@ public class UserNodeTest {
     }
 
     /**
-     * 查询树节点
+     * 保存N叉树
      */
     @Test
     public void testAddTree() {
@@ -61,13 +62,39 @@ public class UserNodeTest {
 
         userNodeService.addTree(userNodeReq);
     }
+
+
     /**
-     * 查询叉树(任意棵)
+     * 查询树
      */
     @Test
     public void testQueryTree() {
         UserNodeInfo userNodeReq = new UserNodeInfo();
         userNodeReq.setTreeName("tree1");
         userNodeService.selectTreeNode(userNodeReq);
+    }
+
+    /**
+     * 增加树节点
+     */
+    @Test
+    public void testAddTreeNode() {
+        TreeNode treeNode  = new TreeNode();
+        treeNode.setTreeName("tree1");
+        treeNode.setNodeName("newNode");
+        treeNode.setParentId(2);
+        userNodeService.addTreeNode(treeNode);
+    }
+
+    /**
+     * 删除树节点
+     */
+    @Test
+    public void testDelTreeNode() {
+        TreeNode treeNode  = new TreeNode();
+        treeNode.setTreeName("tree1");
+        treeNode.setNodeName("newNode");
+        treeNode.setParentId(2);
+        userNodeService.delTreeNode(treeNode);
     }
 }

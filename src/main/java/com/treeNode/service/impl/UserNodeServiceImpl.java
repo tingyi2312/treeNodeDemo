@@ -1,24 +1,24 @@
 package com.treeNode.service.impl;
 
 import com.treeNode.pojo._do.TreeNode;
-import com.treeNode.pojo._do.User;
 import com.treeNode.pojo.mapper.TreeNodeMapper;
 import com.treeNode.pojo.mapper.UserMapper;
 import com.treeNode.pojo.mapper.UserTreeRelMapper;
 import com.treeNode.pojo.request.NodeInfo;
-import com.treeNode.pojo.request.UserNodeRequest;
+import com.treeNode.pojo.request.UserNodeInfo;
 import com.treeNode.service.UserNodeService;
-import com.treeNode.service.UserService;
 import com.treeNode.util.GlobalConstants;
+import javafx.css.Styleable;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@Log
 public class UserNodeServiceImpl implements UserNodeService {
     @Autowired
     private TreeNodeMapper treeNodeMapper;
@@ -35,7 +35,7 @@ public class UserNodeServiceImpl implements UserNodeService {
      * @param userNodeReq
      */
     @Override
-    public void addTree(UserNodeRequest userNodeReq) {
+    public void addTree(UserNodeInfo userNodeReq) {
         if (null != userNodeReq.getNodeInfo()) {
             setNodeInfo(userNodeReq.getTreeName(),null, userNodeReq.getNodeInfo());
         }
@@ -87,6 +87,64 @@ public class UserNodeServiceImpl implements UserNodeService {
     @Override
     public NodeInfo selectTreeNode(NodeInfo NodeInfo) {
         return null;
+    }
+
+    /**
+     * 删除树节点
+     *
+     * @param userNodeReq
+     */
+    @Override
+    public void delTreeNode(UserNodeInfo userNodeReq) {
+
+    }
+
+    /**
+     * 查询树节点
+     *
+     * @param userNodeReq
+     */
+    @Override
+    public UserNodeInfo selectTreeNode(UserNodeInfo userNodeReq) {
+        UserNodeInfo userNodeResp = new UserNodeInfo();
+        userNodeResp.setTreeName(userNodeReq.getTreeName());
+        NodeInfo nodeInfo = new NodeInfo();
+        Map<Integer, List<NodeInfo>> nodeMap = new HashMap<>();
+        TreeNode treeNode = new TreeNode();
+        treeNode.setTreeName(userNodeReq.getTreeName());
+        HashMap<Integer,NodeInfo> tempMap = new HashMap<>();
+        List<TreeNode> treeNodeList = treeNodeMapper.selectBySelective(treeNode);
+        List<TreeNode> root = treeNodeList.stream().filter(t->treeNode.getParentId()==null).collect(Collectors.toList());
+        TreeNode rootnode = root.get(0);
+        nodeInfo.setNodeId(rootnode.getId());
+        nodeInfo.setNodeName(rootnode.getNodeName());
+       if (!CollectionUtils.isEmpty(treeNodeList)) {
+            treeNodeList.stream().forEach(node -> {
+                NodeInfo nodeInfoTemp = new NodeInfo();
+                nodeInfoTemp.setNodeId(node.getId());
+                nodeInfoTemp.setNodeName(node.getNodeName());
+                nodeInfoTemp.setParentId(node.getParentId());
+
+                tempMap.put(node.getId(), nodeInfoTemp);
+                List<NodeInfo> nodeList = null;
+                if (null == nodeMap.get(node.getParentId())) {
+                    nodeList = new ArrayList<>();
+                } else {
+                    nodeList = nodeMap.get(node.getParentId());
+                }
+                nodeList.add(nodeInfoTemp);
+                if(node.getParentId()!=null) {
+                    nodeMap.put(node.getParentId(), nodeList);
+                }
+            });
+        }
+        for(Map.Entry<Integer, List<NodeInfo>> uu : nodeMap.entrySet()) {
+            NodeInfo n1 = tempMap.get(uu.getKey());
+            n1.setSubNodeList(nodeMap.get(n1.getNodeId()));
+        }
+        nodeInfo.setSubNodeList(nodeMap.get(nodeInfo.getNodeId()));
+        userNodeResp.setNodeInfo(nodeInfo);
+        return userNodeResp;
     }
 
     /**

@@ -1,11 +1,10 @@
 import com.treeNode.BootStrapApplication;
 import com.treeNode.UserTypeEnum;
 import com.treeNode.pojo.request.NodeInfo;
-import com.treeNode.pojo.request.UserNodeRequest;
+import com.treeNode.pojo.request.UserNodeInfo;
 import com.treeNode.pojo.request.UserRequest;
 import com.treeNode.service.UserNodeService;
 import com.treeNode.service.UserService;
-import com.treeNode.service.impl.UserServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootStrapApplication.class)
@@ -36,11 +34,11 @@ public class UserNodeTest {
     }
 
     /**
-     * 保存N叉树(任意棵)
+     * 查询树节点
      */
     @Test
     public void testAddTree() {
-        UserNodeRequest userNodeReq = new UserNodeRequest();
+        UserNodeInfo userNodeReq = new UserNodeInfo();
         userNodeReq.setTreeName("tree1");
         NodeInfo nodeInfo = new NodeInfo();
         nodeInfo.setNodeName("root");
@@ -63,5 +61,13 @@ public class UserNodeTest {
 
         userNodeService.addTree(userNodeReq);
     }
-
+    /**
+     * 查询叉树(任意棵)
+     */
+    @Test
+    public void testQueryTree() {
+        UserNodeInfo userNodeReq = new UserNodeInfo();
+        userNodeReq.setTreeName("tree1");
+        userNodeService.selectTreeNode(userNodeReq);
+    }
 }

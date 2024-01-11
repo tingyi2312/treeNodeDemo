@@ -1,7 +1,7 @@
 package com.treeNode.controller;
 
 import com.treeNode.pojo.Response.UserNodeResp;
-import com.treeNode.pojo.request.UserNodeRequest;
+import com.treeNode.pojo.request.UserNodeInfo;
 import com.treeNode.service.UserService;
 import com.treeNode.util.response.BaseRsp;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "/selectUser", method = RequestMethod.POST)
-    public BaseRsp<UserNodeResp> selectUser(@RequestBody UserNodeRequest bookVO) {
+    public BaseRsp<UserNodeResp> selectUser(@RequestBody UserNodeInfo bookVO) {
         userService.saveUser(null);
         return  null;
     }

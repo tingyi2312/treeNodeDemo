@@ -6,7 +6,7 @@ import lombok.Data;
  * 用户请求
  */
 @Data
-public class UserNodeRequest {
+public class UserNodeInfo {
     /**
      * 用户姓名
      */

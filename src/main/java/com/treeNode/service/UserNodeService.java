@@ -1,7 +1,7 @@
 package com.treeNode.service;
 
 import com.treeNode.pojo.request.NodeInfo;
-import com.treeNode.pojo.request.UserNodeRequest;
+import com.treeNode.pojo.request.UserNodeInfo;
 
 public interface UserNodeService {
 /*    a.保存用户(区分管理员和普通用户)
@@ -16,7 +16,7 @@ public interface UserNodeService {
      * 添加一棵树(只有管理员允许添加树)
      * @param userNodeRequest
      */
-    void addTree(UserNodeRequest userNodeRequest);
+    void addTree(UserNodeInfo userNodeRequest);
 
     /**
      * 增加树节点
@@ -53,5 +53,9 @@ public interface UserNodeService {
      * @param NodeInfo
      */
     NodeInfo selectUserTreeNode(NodeInfo NodeInfo);
+
+    void delTreeNode(UserNodeInfo userNodeReq);
+
+    UserNodeInfo selectTreeNode(UserNodeInfo userNodeReq);
 
 }

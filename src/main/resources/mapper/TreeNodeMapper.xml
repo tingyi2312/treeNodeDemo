@@ -15,6 +15,19 @@
     from tree_node
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.treeNode.pojo._do.TreeNode" >
+    select id, tree_name, node_name, parent_id, active, create_time, update_time
+    from tree_node
+    where
+    <if test="treeName != null and treeName.trim()!=''">
+       tree_name = #{treeName,jdbcType=VARCHAR} AND
+    </if>
+    active = 1
+    order by parent_id
+  </select>
+
+
+
   <insert id="insert" parameterType="com.treeNode.pojo._do.TreeNode" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()

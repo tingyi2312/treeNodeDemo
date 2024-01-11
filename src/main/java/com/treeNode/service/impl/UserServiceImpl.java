@@ -2,7 +2,6 @@ package com.treeNode.service.impl;
 
 import com.treeNode.pojo._do.User;
 import com.treeNode.pojo.mapper.UserMapper;
-import com.treeNode.pojo.request.UserNodeRequest;
 import com.treeNode.pojo.request.UserRequest;
 import com.treeNode.service.UserService;
 import com.treeNode.util.GlobalConstants;

@@ -1,6 +1,9 @@
 package com.treeNode.pojo.mapper;
 
 import com.treeNode.pojo._do.TreeNode;
+import com.treeNode.pojo._do.User;
+
+import java.util.List;
 
 /**
  * 树表实体类
@@ -9,6 +12,8 @@ import com.treeNode.pojo._do.TreeNode;
 public interface TreeNodeMapper {
 
     TreeNode selectByPrimaryKey(Integer id);
+
+    List<TreeNode> selectBySelective(TreeNode treeNode);
 
     int insert(TreeNode treeNode);
 

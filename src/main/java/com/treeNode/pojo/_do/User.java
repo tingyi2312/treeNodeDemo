@@ -21,7 +21,7 @@ public class User {
      */
     private String userType;
 
-    private int active;
+    private Integer active;
 
     private Date createTime;
 

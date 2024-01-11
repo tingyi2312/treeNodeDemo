@@ -7,6 +7,7 @@ import com.treeNode.pojo._do.TreeNode;
  */
 
 public interface TreeNodeMapper {
+
     TreeNode selectByPrimaryKey(Integer id);
 
     int insert(TreeNode treeNode);

@@ -1,7 +1,10 @@
 package com.treeNode.pojo.request;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class NodeInfo {
     /**
      * 节点名称

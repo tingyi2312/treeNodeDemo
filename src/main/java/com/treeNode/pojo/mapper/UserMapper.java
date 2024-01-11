@@ -7,7 +7,7 @@ public interface UserMapper {
 
     int insert(User record);
 
-    int updateByPrimaryKey(User record);
+   int updateByPrimaryKey(User record);
 
-    int deleteByPrimaryKey(Integer id);
+//    int deleteByPrimaryKey(Integer id);
 }

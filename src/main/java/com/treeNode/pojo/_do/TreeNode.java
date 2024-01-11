@@ -1,63 +1,36 @@
 package com.treeNode.pojo._do;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 树表实体类
  */
-
+@Data
 public class TreeNode implements Serializable {
     private Integer id;
+
+    /**
+     * 树名称
+     */
+    private String treeName;
 
     /**
      * 节点名称
      */
     private String nodeName;
 
-    private int active;
+    /**
+     * 父节点id
+     */
+    private Integer parentId;
+
+    private Integer active;
 
     private Date createTime;
 
     private Date updateTime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNodeName() {
-        return nodeName;
-    }
-
-    public void setNodeName(String nodeName) {
-        this.nodeName = nodeName;
-    }
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

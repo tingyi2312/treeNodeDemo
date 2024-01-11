@@ -3,6 +3,9 @@ package com.treeNode.service;
 import com.treeNode.pojo._do.TreeNode;
 import com.treeNode.pojo.request.NodeInfo;
 import com.treeNode.pojo.request.UserNodeInfo;
+import com.treeNode.pojo.request.UserRelNode;
+
+import java.util.List;
 
 public interface UserNodeService {
 /*    a.保存用户(区分管理员和普通用户)
@@ -45,14 +48,15 @@ public interface UserNodeService {
 
     /**
      * 用户与树的节点的删除操作
-     * @param nodeInfo
+     * @param userName
+     * @param id
      */
-    void delUserTreeNode(NodeInfo nodeInfo);
+    Boolean delUserTreeNode(String userName, Integer id);
 
     /**
      * 用户与树的节点的查询操作
-     * @param NodeInfo
+     * @param userNodeReq
      */
-    NodeInfo selectUserTreeNode(NodeInfo NodeInfo);
+    List<UserRelNode> selectUserTreeNode(UserNodeInfo userNodeReq);
 
 }

@@ -10,6 +10,7 @@ import com.treeNode.pojo.mapper.UserMapper;
 import com.treeNode.pojo.mapper.UserTreeRelMapper;
 import com.treeNode.pojo.request.NodeInfo;
 import com.treeNode.pojo.request.UserNodeInfo;
+import com.treeNode.pojo.request.UserRelNode;
 import com.treeNode.service.UserNodeService;
 import com.treeNode.service.UserService;
 import com.treeNode.util.GlobalConstants;
@@ -142,7 +143,6 @@ public class UserNodeServiceImpl implements UserNodeService {
     @Override
     public void delTreeNode(TreeNode treeNode) {
         treeNode.setActive(GlobalConstants.ACTIVE_NO);
-        treeNode.setCreateTime(new Date());
         treeNode.setUpdateTime(new Date());
         treeNodeMapper.updateBySelective(treeNode);
     }
@@ -172,12 +172,11 @@ public class UserNodeServiceImpl implements UserNodeService {
             return false;
         }
         try {
-
+            setUserNodeInfo(user.getId(), userNodeReq.getNodeInfo());
         } catch (Exception e) {
             logger.error("用户与树的节点的增加操作失败:", e);
             return false;
         }
-        setUserNodeInfo(user.getId(), userNodeReq.getNodeInfo());
         return true;
     }
 
@@ -199,20 +198,39 @@ public class UserNodeServiceImpl implements UserNodeService {
     /**
      * 用户与树的节点的删除操作
      *
-     * @param NodeInfo
+     * @param id
      */
     @Override
-    public void delUserTreeNode(NodeInfo NodeInfo) {
-
+    public Boolean delUserTreeNode(String userName, Integer id) {
+        User user = userService.getUserInfoByName(userName);
+        if (null == user || UserTypeEnum.NORMAL.getCode().equals(user.getUserType())) {
+            logger.error("非管理员，没有操作权限");
+            return false;
+        }
+        UserTreeRel userTreeRel = new UserTreeRel();
+        userTreeRel.setId(id);
+        userTreeRel.setActive(GlobalConstants.ACTIVE_NO);
+        userTreeRel.setUpdateTime(new Date());
+        int num = userTreeRelMapper.updateByPrimaryKey(userTreeRel);
+        return num >0 ? true : false;
     }
 
     /**
      * 用户与树的节点的查询操作
      *
-     * @param NodeInfo
+     * @param userNodeReq
      */
     @Override
-    public NodeInfo selectUserTreeNode(NodeInfo NodeInfo) {
-        return null;
+    public List<UserRelNode> selectUserTreeNode(UserNodeInfo userNodeReq) {
+        User user = userService.getUserInfoByName(userNodeReq.getUserName());
+        if (null == user) {
+            logger.error("用户信息为空");
+            return null;
+        }
+
+        UserTreeRel userTreeRel = new UserTreeRel();
+        userTreeRel.setUserId(user.getId());
+        List<UserRelNode> userTreeRelList = userTreeRelMapper.selectUserRelNode(userTreeRel);
+        return userTreeRelList;
     }
 }

@@ -3,6 +3,7 @@ import com.treeNode.enums.UserTypeEnum;
 import com.treeNode.pojo._do.TreeNode;
 import com.treeNode.pojo.request.NodeInfo;
 import com.treeNode.pojo.request.UserNodeInfo;
+import com.treeNode.pojo.request.UserRelNode;
 import com.treeNode.pojo.request.UserRequest;
 import com.treeNode.service.UserNodeService;
 import com.treeNode.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootStrapApplication.class)
@@ -79,7 +81,7 @@ public class UserNodeTest {
      */
     @Test
     public void testAddTreeNode() {
-        TreeNode treeNode  = new TreeNode();
+        TreeNode treeNode = new TreeNode();
         treeNode.setTreeName("tree1");
         treeNode.setNodeName("newNode");
         treeNode.setParentId(2);
@@ -91,7 +93,7 @@ public class UserNodeTest {
      */
     @Test
     public void testDelTreeNode() {
-        TreeNode treeNode  = new TreeNode();
+        TreeNode treeNode = new TreeNode();
         treeNode.setTreeName("tree1");
         treeNode.setNodeName("newNode");
         treeNode.setParentId(2);
@@ -123,4 +125,19 @@ public class UserNodeTest {
         userNodeReq.setNodeInfo(nodeInfo);
         userNodeService.addUserTreeRel(userNodeReq);
     }
+
+    @Test
+    public void delUserTreeNode() {
+        userNodeService.delUserTreeNode("test1", 2);
+    }
+
+    @Test
+    public void selectUserTreeNode() {
+        UserNodeInfo userNodeReq = new UserNodeInfo();
+        userNodeReq.setUserName("test1");
+        List<UserRelNode> userRelNodeList = userNodeService.selectUserTreeNode(userNodeReq);
+        System.out.println(userRelNodeList);
+    }
+
 }
+

@@ -50,10 +50,16 @@ public class UserNodeServiceImpl implements UserNodeService {
      * @param userNodeReq
      */
     @Override
-    public void addTree(UserNodeInfo userNodeReq) {
-        if (null != userNodeReq.getNodeInfo()) {
-            setNodeInfo(userNodeReq.getTreeName(),null, userNodeReq.getNodeInfo());
+    public Boolean addTree(UserNodeInfo userNodeReq) {
+        try {
+            if (null != userNodeReq.getNodeInfo()) {
+                setNodeInfo(userNodeReq.getTreeName(),null, userNodeReq.getNodeInfo());
+            }
+            return true;
+        } catch (Exception e) {
+            logger.error("添加树异常", e );
         }
+        return false;
     }
 
     private int setNodeInfo(String treeName, Integer parentId, NodeInfo nodeInfo) {
@@ -128,11 +134,12 @@ public class UserNodeServiceImpl implements UserNodeService {
      * @param treeNode
      */
     @Override
-    public void addTreeNode(TreeNode treeNode) {
+    public Boolean addTreeNode(TreeNode treeNode) {
         treeNode.setActive(GlobalConstants.ACTIVE_YES);
         treeNode.setCreateTime(new Date());
         treeNode.setUpdateTime(new Date());
-        treeNodeMapper.insert(treeNode);
+        int num = treeNodeMapper.insert(treeNode);
+        return num > 0 ? true : false;
     }
 
     /**
@@ -141,10 +148,11 @@ public class UserNodeServiceImpl implements UserNodeService {
      * @param treeNode
      */
     @Override
-    public void delTreeNode(TreeNode treeNode) {
+    public Boolean delTreeNode(TreeNode treeNode) {
         treeNode.setActive(GlobalConstants.ACTIVE_NO);
         treeNode.setUpdateTime(new Date());
-        treeNodeMapper.updateBySelective(treeNode);
+        int num = treeNodeMapper.updateBySelective(treeNode);
+        return num > 0 ? true : false;
     }
 
     private Boolean hasPrivate(String userName) {

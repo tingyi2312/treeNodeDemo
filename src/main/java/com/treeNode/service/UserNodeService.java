@@ -12,19 +12,19 @@ public interface UserNodeService {
      * 添加一棵树(只有管理员允许添加树)
      * @param userNodeRequest
      */
-    void addTree(UserNodeInfo userNodeRequest);
+    Boolean addTree(UserNodeInfo userNodeRequest);
 
     /**
      * 增加树节点
      * @param treeNode
      */
-    void addTreeNode(TreeNode treeNode);
+    Boolean addTreeNode(TreeNode treeNode);
 
     /**
      * 删除树节点
      * @param treeNode
      */
-    void delTreeNode(TreeNode treeNode);
+    Boolean delTreeNode(TreeNode treeNode);
 
     /**
      * 查询树节点

@@ -1,3 +1,4 @@
+import com.alibaba.fastjson.JSONObject;
 import com.treeNode.BootStrapApplication;
 import com.treeNode.enums.UserTypeEnum;
 import com.treeNode.pojo._do.TreeNode;
@@ -7,8 +8,11 @@ import com.treeNode.pojo.request.UserRelNode;
 import com.treeNode.pojo.request.UserRequest;
 import com.treeNode.service.UserNodeService;
 import com.treeNode.service.UserService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,6 +23,8 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootStrapApplication.class)
 public class UserNodeTest {
+    public static final Logger logger = LoggerFactory.getLogger(UserNodeTest.class);
+
     @Autowired
     private UserService userService;
 
@@ -62,7 +68,10 @@ public class UserNodeTest {
         nodeInfoB2.setSubNodeList(Arrays.asList(nodeInfoC1, nodeInfoC2));
         userNodeReq.setNodeInfo(nodeInfo);
 
-        userNodeService.addTree(userNodeReq);
+        logger.info("保存N叉树request:{}", JSONObject.toJSONString(userNodeReq));
+        Boolean result = userNodeService.addTree(userNodeReq);
+        logger.info("保存N叉树result:{}", result);
+        Assert.assertTrue(result);
     }
 
 
@@ -73,7 +82,9 @@ public class UserNodeTest {
     public void testQueryTree() {
         UserNodeInfo userNodeReq = new UserNodeInfo();
         userNodeReq.setTreeName("tree1");
-        userNodeService.selectTreeNode(userNodeReq);
+        logger.info("查询树request:{}", JSONObject.toJSONString(userNodeReq));
+        UserNodeInfo userNodeInfo = userNodeService.selectTreeNode(userNodeReq);
+        logger.info("查询树result:{}",  JSONObject.toJSONString(userNodeInfo));
     }
 
     /**
@@ -85,7 +96,10 @@ public class UserNodeTest {
         treeNode.setTreeName("tree1");
         treeNode.setNodeName("newNode");
         treeNode.setParentId(2);
-        userNodeService.addTreeNode(treeNode);
+        logger.info("增加树节点request:{}", JSONObject.toJSONString(treeNode));
+        Boolean result = userNodeService.addTreeNode(treeNode);
+        logger.info("增加树节点result:{}", JSONObject.toJSONString(treeNode));
+        Assert.assertTrue(result);
     }
 
     /**
@@ -97,7 +111,10 @@ public class UserNodeTest {
         treeNode.setTreeName("tree1");
         treeNode.setNodeName("newNode");
         treeNode.setParentId(2);
-        userNodeService.delTreeNode(treeNode);
+        logger.info("删除树节点request:{}", JSONObject.toJSONString(treeNode));
+        Boolean result = userNodeService.delTreeNode(treeNode);
+        logger.info("删除树节点result:{}", result);
+        Assert.assertTrue(result);
     }
 
     /**
@@ -125,7 +142,10 @@ public class UserNodeTest {
         nodeInfoB2.setNodeId(4);
         nodeInfoA1.setSubNodeList(Arrays.asList(nodeInfoB1, nodeInfoB2));
         userNodeReq.setNodeInfo(nodeInfo);
-        userNodeService.addUserTreeRel(userNodeReq);
+        logger.info("增加用户与树的节点request:{}", JSONObject.toJSONString(userNodeReq));
+        Boolean result = userNodeService.addUserTreeRel(userNodeReq);
+        logger.info("增加用户与树的节点result:{}", result);
+        Assert.assertTrue(result);
     }
 
     /**
@@ -133,7 +153,9 @@ public class UserNodeTest {
      */
     @Test
     public void delUserTreeNode() {
-        userNodeService.delUserTreeNode("test1", 2);
+        Boolean result = userNodeService.delUserTreeNode("test1", 2);
+        logger.info("删除用户与树的节点request:{}", result);
+        Assert.assertTrue(result);
     }
 
     /**
@@ -143,8 +165,9 @@ public class UserNodeTest {
     public void selectUserTreeNode() {
         UserNodeInfo userNodeReq = new UserNodeInfo();
         userNodeReq.setUserName("test1");
+        logger.info("查询用户与树的节点的request:{}", JSONObject.toJSONString(userNodeReq));
         List<UserRelNode> userRelNodeList = userNodeService.selectUserTreeNode(userNodeReq);
-        System.out.println(userRelNodeList);
+        logger.info("查询用户与树的节点request:{}", JSONObject.toJSONString(userRelNodeList));
     }
 
 }

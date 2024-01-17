@@ -1,11 +1,13 @@
 package com.treeNode.pojo.request;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * 用户请求
  */
 @Data
+@ToString(callSuper =true)
 public class UserNodeInfo {
     /**
      * 用户姓名

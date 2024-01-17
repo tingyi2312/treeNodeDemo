@@ -209,18 +209,47 @@ public class UserNodeServiceImpl implements UserNodeService {
      * @param id
      */
     @Override
-    public Boolean delUserTreeNode(String userName, Integer id) {
+    public Boolean delUserTreeNode(String userName, String treeName, Integer id) {
         User user = userService.getUserInfoByName(userName);
         if (null == user || UserTypeEnum.NORMAL.getCode().equals(user.getUserType())) {
             logger.error("非管理员，没有操作权限");
             return false;
         }
+
+        //查询用户关联的所有树的节点
+        UserRelNode userRelNode = new UserRelNode();
+        userRelNode.setUserId(user.getId());
+        userRelNode.setTreeName(treeName);
+        List<UserRelNode> userTreeRelList = userTreeRelMapper.selectUserRelNode(userRelNode);
+        if (!CollectionUtils.isEmpty(userTreeRelList)) {
+            //获取要删除的节点
+            List<UserRelNode> nodeList = userTreeRelList.stream().filter(item -> id == item.getId()).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(nodeList)) {
+                delUserTreeNode(nodeList.get(0), userTreeRelList);
+            } else {
+                logger.error("当前节点查询为空");
+            }
+        }
+
+        return true;
+    }
+
+    private Boolean delUserTreeNode(UserRelNode userRelNode, List<UserRelNode> userTreeRelList) {
+        //删除当前节点
         UserTreeRel userTreeRel = new UserTreeRel();
-        userTreeRel.setId(id);
+        userTreeRel.setId(userRelNode.getId());
         userTreeRel.setActive(GlobalConstants.ACTIVE_NO);
         userTreeRel.setUpdateTime(new Date());
-        int num = userTreeRelMapper.updateByPrimaryKey(userTreeRel);
-        return num >0 ? true : false;
+        userTreeRelMapper.updateByPrimaryKey(userTreeRel);
+
+        //删除子节点
+        List<UserRelNode> subNodeList = userTreeRelList.stream().filter(item -> userRelNode.getNodeId() == item.getParentId()).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(subNodeList)) {
+            subNodeList.stream().forEach(sub -> {
+                delUserTreeNode(sub, userTreeRelList);
+            });
+        }
+        return true;
     }
 
     /**
@@ -228,16 +257,43 @@ public class UserNodeServiceImpl implements UserNodeService {
      * @param userNodeReq
      */
     @Override
-    public List<UserRelNode> selectUserTreeNode(UserNodeInfo userNodeReq) {
+    public List<NodeInfo> selectUserTreeNode(UserNodeInfo userNodeReq) {
         User user = userService.getUserInfoByName(userNodeReq.getUserName());
         if (null == user) {
             logger.error("用户信息为空");
             return null;
         }
 
-        UserTreeRel userTreeRel = new UserTreeRel();
-        userTreeRel.setUserId(user.getId());
-        List<UserRelNode> userTreeRelList = userTreeRelMapper.selectUserRelNode(userTreeRel);
-        return userTreeRelList;
+        UserRelNode userRelNode = new UserRelNode();
+        userRelNode.setUserId(user.getId());
+        userRelNode.setTreeName(userNodeReq.getTreeName());
+        List<UserRelNode> userTreeRelList = userTreeRelMapper.selectUserRelNode(userRelNode);
+        return userTreeRelList.stream()
+                .filter(item -> null== item.getParentId())
+                .map(item -> {
+                    NodeInfo nodeInfo = new NodeInfo();
+                    nodeInfo.setNodeId(item.getNodeId());
+                    nodeInfo.setNodeName(item.getNodeName());
+                    nodeInfo.setParentId(item.getParentId());
+                    nodeInfo.setSubNodeList(getChild(item.getNodeId(), userTreeRelList));
+                    return nodeInfo;
+                })
+                //.sorted(Comparator.comparingInt(menu -> (menu.getSortOrder() == null ? 0 : menu.getSortOrder())))
+                .collect(Collectors.toList());
+    }
+
+    private List<NodeInfo> getChild(Integer nodeId, List<UserRelNode> userTreeRelList) {
+        return userTreeRelList.stream()
+                .filter(item -> Objects.equals(item.getParentId(), nodeId))
+                .map(item -> {
+                    NodeInfo nodeInfo = new NodeInfo();
+                    nodeInfo.setNodeId(item.getNodeId());
+                    nodeInfo.setNodeName(item.getNodeName());
+                    nodeInfo.setParentId(item.getParentId());
+                    nodeInfo.setSubNodeList(getChild(item.getNodeId(), userTreeRelList));
+                    return nodeInfo;
+                 })
+//              .sorted(Comparator.comparingInt(menu -> (menu.getSortOrder() == null ? 0 : menu.getSortOrder())))
+                .collect(Collectors.toList());
     }
 }

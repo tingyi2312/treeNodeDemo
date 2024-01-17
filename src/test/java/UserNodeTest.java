@@ -139,8 +139,9 @@ public class UserNodeTest {
         nodeInfoB1.setNodeId(3);
         NodeInfo nodeInfoB2 = new NodeInfo();
         nodeInfoB2.setNodeName("b2");
-        nodeInfoB2.setNodeId(4);
+        nodeInfoB2.setNodeId(54);
         nodeInfoA1.setSubNodeList(Arrays.asList(nodeInfoB1, nodeInfoB2));
+        nodeInfo.setSubNodeList(Arrays.asList(nodeInfoA1));
         userNodeReq.setNodeInfo(nodeInfo);
         logger.info("增加用户与树的节点request:{}", JSONObject.toJSONString(userNodeReq));
         Boolean result = userNodeService.addUserTreeRel(userNodeReq);
@@ -153,7 +154,7 @@ public class UserNodeTest {
      */
     @Test
     public void delUserTreeNode() {
-        Boolean result = userNodeService.delUserTreeNode("test1", 2);
+        Boolean result = userNodeService.delUserTreeNode("test1", "tree1", 13);
         logger.info("删除用户与树的节点request:{}", result);
         Assert.assertTrue(result);
     }
@@ -165,9 +166,10 @@ public class UserNodeTest {
     public void selectUserTreeNode() {
         UserNodeInfo userNodeReq = new UserNodeInfo();
         userNodeReq.setUserName("test1");
+        userNodeReq.setTreeName("tree1");
         logger.info("查询用户与树的节点的request:{}", JSONObject.toJSONString(userNodeReq));
-        List<UserRelNode> userRelNodeList = userNodeService.selectUserTreeNode(userNodeReq);
-        logger.info("查询用户与树的节点request:{}", JSONObject.toJSONString(userRelNodeList));
+        List<NodeInfo> nodeList = userNodeService.selectUserTreeNode(userNodeReq);
+        logger.info("查询用户与树的节点request:{}", JSONObject.toJSONString(nodeList));
     }
 
 }

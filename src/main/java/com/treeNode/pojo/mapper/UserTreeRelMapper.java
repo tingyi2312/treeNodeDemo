@@ -10,7 +10,7 @@ public interface UserTreeRelMapper {
 
     UserTreeRel selectByPrimaryKey(Integer id);
 
-    List<UserRelNode> selectUserRelNode(UserTreeRel record);
+    List<UserRelNode> selectUserRelNode(UserRelNode record);
 
     int insert(UserTreeRel record);
 

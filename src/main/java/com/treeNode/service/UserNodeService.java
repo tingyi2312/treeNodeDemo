@@ -1,8 +1,8 @@
 package com.treeNode.service;
 
 import com.treeNode.pojo._do.TreeNode;
+import com.treeNode.pojo.request.NodeInfo;
 import com.treeNode.pojo.request.UserNodeInfo;
-import com.treeNode.pojo.request.UserRelNode;
 
 import java.util.List;
 
@@ -43,12 +43,12 @@ public interface UserNodeService {
      * @param userName
      * @param id
      */
-    Boolean delUserTreeNode(String userName, Integer id);
+    Boolean delUserTreeNode(String userName, String treeName, Integer id);
 
     /**
      * 用户与树的节点的查询操作
      * @param userNodeReq
      */
-    List<UserRelNode> selectUserTreeNode(UserNodeInfo userNodeReq);
+    List<NodeInfo> selectUserTreeNode(UserNodeInfo userNodeReq);
 
 }

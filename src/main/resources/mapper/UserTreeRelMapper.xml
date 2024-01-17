@@ -22,13 +22,19 @@
     from user_tree_rel
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectUserRelNode" resultMap="JoinResultMap" parameterType="com.treeNode.pojo._do.UserTreeRel" >
+  <select id="selectUserRelNode" resultMap="JoinResultMap" parameterType="com.treeNode.pojo.request.UserRelNode" >
     select rel.id, rel.user_id, rel.node_id, t.tree_name, t.node_name, t.parent_id
     from user_tree_rel rel
     left join tree_node t on t.id = rel.node_id and t.active=1
     where
     <if test="userId != null">
       rel.user_id = #{userId,jdbcType=INTEGER} AND
+    </if>
+    <if test="treeName != null">
+      t.tree_name = #{treeName,jdbcType=VARCHAR} AND
+    </if>
+    <if test="id != null">
+      rel.id = #{id,jdbcType=INTEGER} AND
     </if>
     rel.active = 1
   </select>
